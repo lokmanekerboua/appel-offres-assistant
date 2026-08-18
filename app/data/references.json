@@ -1,0 +1,32 @@
+[
+  {
+    "project_name": "Rénovation éclairage public - Ville de Nancy",
+    "client": "Mairie de Nancy",
+    "keywords": ["éclairage public", "smart city", "rénovation énergétique", "IoT"]
+  },
+  {
+    "project_name": "Déploiement fibre optique zone rurale",
+    "client": "Syndicat Mixte Numérique Grand Est",
+    "keywords": ["télécoms", "fibre optique", "aménagement numérique"]
+  },
+  {
+    "project_name": "Traitement des eaux usées - Agglomération Reims",
+    "client": "Grand Reims",
+    "keywords": ["environnement", "traitement eaux usées", "BTP", "génie civil"]
+  },
+  {
+    "project_name": "Maintenance réseau électrique HTA/BT",
+    "client": "Enedis Grand Est",
+    "keywords": ["énergie", "réseau électrique", "maintenance"]
+  },
+  {
+    "project_name": "Construction collège - Département Moselle",
+    "client": "Conseil Départemental de Moselle",
+    "keywords": ["BTP", "construction", "bâtiment public"]
+  },
+  {
+    "project_name": "Supervision réseau chauffage urbain",
+    "client": "Métropole de Metz",
+    "keywords": ["énergie", "chauffage urbain", "smart city", "supervision"]
+  }
+]

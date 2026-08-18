@@ -1,0 +1,7 @@
+{
+  "company_name": "Demo Corp",
+  "certifications": ["ISO 9001", "MASE"],
+  "sectors": ["énergie", "environnement", "télécoms", "BTP", "smart cities"],
+  "max_project_budget_eur": 5000000,
+  "employee_count": 85
+}
