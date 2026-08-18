@@ -1,14 +1,13 @@
-from pydantic_settings import BaseSettings
+from pydantic_settings import BaseSettings, SettingsConfigDict
 
 
 class Settings(BaseSettings):
-    anthropic_api_key: str
-    model_name: str = "claude-sonnet-4-6"
+    groq_api_key: str
+    model_name: str = "openai/gpt-oss-120b"
     max_tool_loops: int = 5
     max_tokens: int = 2000
 
-    class Config:
-        env_file = ".env"
+    model_config = SettingsConfigDict(env_file=".env", extra="ignore")
 
 
 settings = Settings()

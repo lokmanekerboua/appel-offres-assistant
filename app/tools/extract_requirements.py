@@ -1,7 +1,7 @@
 import json
 import logging
 
-from app.core.llm_client import call_claude
+from app.core.llm_client import call_groq
 
 logger = logging.getLogger(__name__)
 
@@ -17,17 +17,14 @@ Réponds UNIQUEMENT avec un objet JSON valide, sans texte autour, au format :
 
 
 def extract_requirements(tender_text: str) -> dict:
-    """
-    LLM call that pulls structured requirements out of raw tender text.
-    Not exposed as a Claude 'tool' in the agent loop — called directly
-    since it's always the first step of the pipeline.
-    """
-    response = call_claude(
-        system=EXTRACTION_SYSTEM_PROMPT,
-        messages=[{"role": "user", "content": tender_text}],
+    response = call_groq(
+        messages=[
+            {"role": "system", "content": EXTRACTION_SYSTEM_PROMPT},
+            {"role": "user", "content": tender_text},
+        ]
     )
 
-    raw_text = "".join(block.text for block in response.content if block.type == "text")
+    raw_text = response.choices[0].message.content
 
     try:
         cleaned = raw_text.strip().removeprefix("```json").removesuffix("```").strip()

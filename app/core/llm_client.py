@@ -1,20 +1,21 @@
 import logging
 import time
 
-from anthropic import Anthropic, APIError, APIStatusError, RateLimitError
+from openai import OpenAI, APIError, RateLimitError, APIStatusError
 
 from app.core.config import settings
 
 logger = logging.getLogger(__name__)
 
-client = Anthropic(api_key=settings.anthropic_api_key)
+client = OpenAI(
+    api_key=settings.groq_api_key,
+    base_url="https://api.groq.com/openai/v1",
+)
 
 
-def call_claude(messages: list[dict], tools: list[dict] | None = None, system: str = "") -> object:
+def call_groq(messages: list[dict], tools: list[dict] | None = None) -> object:
     """
-    Wrapper around the Anthropic API call with basic retry handling.
-    Keeps error handling / latency logging in one place instead of
-    duplicating it inside every tool or the orchestrator.
+    Wrapper around Groq's chat completion API (OpenAI-compatible).
     """
     max_retries = 3
     backoff_seconds = 2
@@ -22,22 +23,19 @@ def call_claude(messages: list[dict], tools: list[dict] | None = None, system: s
     for attempt in range(1, max_retries + 1):
         start = time.monotonic()
         try:
-            response = client.messages.create(
+            response = client.chat.completions.create(
                 model=settings.model_name,
                 max_tokens=settings.max_tokens,
-                system=system,
                 messages=messages,
-                tools=tools or [],
+                tools=tools or None,
             )
             elapsed = time.monotonic() - start
             logger.info(
-                "claude_call_success",
+                "groq_call_success",
                 extra={
                     "attempt": attempt,
                     "elapsed_seconds": round(elapsed, 2),
-                    "input_tokens": response.usage.input_tokens,
-                    "output_tokens": response.usage.output_tokens,
-                    "stop_reason": response.stop_reason,
+                    "finish_reason": response.choices[0].finish_reason,
                 },
             )
             return response
@@ -48,13 +46,13 @@ def call_claude(messages: list[dict], tools: list[dict] | None = None, system: s
             backoff_seconds *= 2
 
         except APIStatusError as e:
-            logger.error(f"claude_api_status_error: {e.status_code} - {e.message}")
+            logger.error(f"groq_api_status_error: {e.status_code} - {e.message}")
             if attempt == max_retries:
                 raise
             time.sleep(backoff_seconds)
 
         except APIError as e:
-            logger.error(f"claude_api_error: {e}")
+            logger.error(f"groq_api_error: {e}")
             raise
 
-    raise RuntimeError("Claude call failed after max retries")
+    raise RuntimeError("Groq call failed after max retries")
