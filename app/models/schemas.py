@@ -24,10 +24,11 @@ class EligibilityResult(BaseModel):
     missing_certifications: list[str] = []
     risk_notes: list[str] = []
 
-
 class AnalysisResponse(BaseModel):
     requirements: Requirement
     eligibility: EligibilityResult
     matched_references: list[MatchedReference]
     draft_intro: str
     tool_calls_made: list[str]
+    report_pdf_key: str | None = None
+    report_pdf_url: str | None = None

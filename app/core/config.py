@@ -7,7 +7,14 @@ class Settings(BaseSettings):
     max_tool_loops: int = 5
     max_tokens: int = 2000
 
-    model_config = SettingsConfigDict(env_file=".env", extra="ignore")
-
+    aws_access_key_id: str
+    aws_secret_access_key: str
+    aws_region: str = "eu-west-3"
+    s3_bucket_name: str
+    model_config = SettingsConfigDict(
+        env_file=".env",
+        extra="ignore",
+        protected_namespaces=('settings_',)
+    )
 
 settings = Settings()
